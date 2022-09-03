@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'base.html' %}
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        <div class="card-body">
+             <div class="row row-space justify-content-center">
+                <div class="col-6">
+                    <h3 class="alert alert-secondary d-flex justify-content-lg-center">Add todo item</h3>
+                </div>
+             </div>
+
+            <form method="POST">
+                 {{ form.csrf_token }}
+                <div class="row row-space justify-content-center">
+                    <div class="col-6">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(class="form-control input--style-4") }}
+                    </div>
+                </div>
+                <div class="row row-space justify-content-center">
+                    <div class="col-6">
+                        {{ form.note.label(class="form-label") }}
+                        {{ form.note(class="form-control input--style-4") }}
+                    </div>
+                </div>
+                <div class="row row-space justify-content-center">
+                    <div class="col-6">
+                        {{ form.due_date.label(class="form-label") }}
+                        {{ form.due_date(class="form-control input--style-4") }}
+                    </div>
+                </div>
+
+                {% for itm, message in form.errors.items() %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="color:red">
+                      {% if itm != 'csrf_token' %}
+                        {{ message[0] }}
+                      {% endif %}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+
+                <div class="p-t-15 d-flex justify-content-center my-3">
+                    <button class="btn btn--radius-2 btn-primary" type="submit">Submit</button>
+                </div>
+            </form>
+
+            {% for message in get_flashed_messages() %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert" style="color: green">
+                  {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container d-flex text-center">
+    <table id="todo_table" class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+{#          <th scope="col">#</th>#}
+          <th scope="col">Title</th>
+          <th scope="col">Note</th>
+          <th scope="col">Due Date</th>
+          <th scope="col">Status</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
+          <th scope="col">Mark Complete</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for item in context.todo_list %}
+          <tr>
+{#              <th scope="row">{{ item.id }}</th>#}
+              <td class="font-weight-bold">{{ item.title }}</td>
+              <td class="w-50">{{ item.note }}</td>
+              <td>{{ item.due_date.date() }}</td>
+              {% if item.completed %}
+                  <td class="badge badge-pill badge-success m-2">
+                      complete
+                  </td>
+              {% else %}
+                  <td class="badge badge-pill badge-danger m-2">
+                      pending
+                  </td>
+              {% endif %}
+              <td>
+                  {% if not item.completed %}
+                      <form action="/todo_list/edit/{{ item.id }}">
+                          <input class="btn btn-sm btn-secondary " type="submit" value="Edit">
+                      </form>
+                  {% endif %}
+              </td>
+              <td>
+                  {% if not item.completed %}
+                      <form action="/todo_list/delete/{{ item.id }}">
+                          <input class="btn btn-sm btn-danger " type="submit" value="Delete">
+                      </form>
+                  {% endif %}
+              </td>
+              <td>
+                  {% if not item.completed %}
+                      <form action="/todo_list/mark_complete/{{ item.id }}">
+                          <input class="btn btn-sm btn-secondary " type="submit" value="Completed">
+                      </form>
+                  {% endif %}
+              </td>
+            </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+</body>
+
+<script>
+    $(document).ready(function() {
+      $('#todo_table').DataTable();
+    });
+</script>
+</html>
