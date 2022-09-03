@@ -41,23 +41,13 @@
                         {{ form.csrf_token }}
                         <div class="row row-space">
                             <div class="col-6">
-{#                                <div class="input-group">#}
-{#                                    <label class="label">Email</label>#}
-{#                                    <input class="input--style-4" type="text" name="email">#}
-{#                                </div>#}
                                 {{ form.username.label(class="form-label") }}
-
                         		{{ form.username(class="form-control input--style-4") }}
                             </div>
                         </div>
                         <div class="row row-space">
                             <div class="col-6">
-{#                                <div class="input-group">#}
-{#                                    <label class="label">Password</label>#}
-{#                                    <input class="input--style-4" type="password" name="password">#}
-{#                                </div>#}
                                 {{ form.password.label(class="form-label") }}
-
                         		{{ form.password(class="form-control input--style-4") }}
                             </div>
                         </div>

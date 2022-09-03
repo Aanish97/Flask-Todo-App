@@ -23,7 +23,18 @@ def upgrade():
         sa.Column('id', sa.Integer()),
         sa.Column('username', sa.String(length=200), nullable=False),
         sa.Column('email', sa.String(length=200), nullable=False),
-        sa.Column('password', sa.String(length=200), nullable=False),
+        sa.Column('password_hashed', sa.String(length=200), nullable=False),
+        sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table(
+        'todo',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('user_id', sa.Integer(), nullable=False),
+        sa.Column('due_date', sa.DateTime(), nullable=True),
+        sa.Column('completed', sa.Boolean(), nullable=True),
+        sa.Column('note', sa.Text(length=200), nullable=True),
+        sa.Column('title', sa.Text(length=200), nullable=True),
+        sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
         sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

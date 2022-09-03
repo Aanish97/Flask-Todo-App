@@ -59,61 +59,64 @@
         </div>
     </div>
 
-    <div class="container d-flex text-center">
-    <table id="todo_table" class="table table-striped">
-      <thead class="thead-dark">
-        <tr>
-{#          <th scope="col">#</th>#}
-          <th scope="col">Title</th>
-          <th scope="col">Note</th>
-          <th scope="col">Due Date</th>
-          <th scope="col">Status</th>
-          <th scope="col">Edit</th>
-          <th scope="col">Delete</th>
-          <th scope="col">Mark Complete</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for item in context.todo_list %}
-          <tr>
-{#              <th scope="row">{{ item.id }}</th>#}
-              <td class="font-weight-bold">{{ item.title }}</td>
-              <td class="w-50">{{ item.note }}</td>
-              <td>{{ item.due_date.date() }}</td>
-              {% if item.completed %}
-                  <td class="badge badge-pill badge-success m-2">
-                      complete
-                  </td>
-              {% else %}
-                  <td class="badge badge-pill badge-danger m-2">
-                      pending
-                  </td>
-              {% endif %}
-              <td>
-                  {% if not item.completed %}
-                      <form action="/todo_list/edit/{{ item.id }}">
-                          <input class="btn btn-sm btn-secondary " type="submit" value="Edit">
-                      </form>
-                  {% endif %}
-              </td>
-              <td>
-                  {% if not item.completed %}
-                      <form action="/todo_list/delete/{{ item.id }}">
-                          <input class="btn btn-sm btn-danger " type="submit" value="Delete">
-                      </form>
-                  {% endif %}
-              </td>
-              <td>
-                  {% if not item.completed %}
-                      <form action="/todo_list/mark_complete/{{ item.id }}">
-                          <input class="btn btn-sm btn-secondary " type="submit" value="Completed">
-                      </form>
-                  {% endif %}
-              </td>
-            </tr>
-      {% endfor %}
-      </tbody>
-    </table>
+    {% if context.todo_list %}
+        <div class="container ">
+            <table id="todo_table" class="table table-striped">
+              <thead class="thead-dark">
+                <tr>
+        {#          <th scope="col">#</th>#}
+                  <th scope="col">Title</th>
+                  <th scope="col">Note</th>
+                  <th scope="col">Due Date</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                  <th scope="col">Mark Complete</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for item in context.todo_list %}
+                  <tr>
+        {#              <th scope="row">{{ item.id }}</th>#}
+                      <td class="font-weight-bold">{{ item.title }}</td>
+                      <td class="w-50">{{ item.note }}</td>
+                      <td>{{ item.due_date.date() }}</td>
+                      {% if item.completed %}
+                          <td class="badge badge-pill badge-success m-2">
+                              complete
+                          </td>
+                      {% else %}
+                          <td class="badge badge-pill badge-danger m-2">
+                              pending
+                          </td>
+                      {% endif %}
+                      <td>
+                          {% if not item.completed %}
+                              <form action="/todo_list/edit/{{ item.id }}">
+                                  <input class="btn btn-sm btn-secondary " type="submit" value="Edit">
+                              </form>
+                          {% endif %}
+                      </td>
+                      <td>
+                          {% if not item.completed %}
+                              <form action="/todo_list/delete/{{ item.id }}">
+                                  <input class="btn btn-sm btn-danger " type="submit" value="Delete">
+                              </form>
+                          {% endif %}
+                      </td>
+                      <td>
+                          {% if not item.completed %}
+                              <form action="/todo_list/mark_complete/{{ item.id }}">
+                                  <input class="btn btn-sm btn-secondary " type="submit" value="Completed">
+                              </form>
+                          {% endif %}
+                      </td>
+                    </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+        </div>
+    {% endif %}
 
 </body>
 

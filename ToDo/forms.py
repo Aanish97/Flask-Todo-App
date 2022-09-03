@@ -1,21 +1,18 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, ValidationError, TextAreaField
-from wtforms.fields.datetime import DateField
-from wtforms.fields.numeric import IntegerField
-from wtforms.validators import DataRequired, EqualTo, Length
-from wtforms.widgets import TextArea
 from flask_ckeditor import CKEditorField
-from flask_wtf.file import FileField
+from wtforms.fields.datetime import DateField
+from wtforms.validators import DataRequired, EqualTo
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, ValidationError, TextAreaField
 
 
-# Create Login Form
+# Create a Login Form
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
-# Create a Posts Form
+# Create a Todo Form
 class TodoForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     note = CKEditorField('Note', validators=[DataRequired()])
@@ -23,7 +20,7 @@ class TodoForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
-# Create a Register Form Class
+# Create a Register Form
 class UserForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])

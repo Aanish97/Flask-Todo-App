@@ -37,6 +37,9 @@ def index():
 @app.route('/todo_list/delete/<int:id>')
 @login_required
 def mark_complete_todo(id):
+    """
+    marking a todo item as complete
+    """
     todo_to_delete = Todo.query.filter_by(id=id).first()
     if todo_to_delete:
         db.session.delete(todo_to_delete)
@@ -47,6 +50,9 @@ def mark_complete_todo(id):
 @app.route('/todo_list/mark_complete/<int:id>')
 @login_required
 def delete_todo(id):
+    """
+    deleting a todo item
+    """
     mark_complete_item = Todo.query.filter_by(id=id).first()
     if mark_complete_item:
         mark_complete_item.completed = True
@@ -57,14 +63,18 @@ def delete_todo(id):
 @app.route('/todo_list/edit/<int:id>')
 @login_required
 def edit_todo(id):
+    """
+    editing a todo item
+    """
     todo_to_edit = Todo.query.filter_by(id=id).first()
     if todo_to_edit:
         return redirect(url_for('todo_list',
                                 id=id,
                                 title=todo_to_edit.title,
                                 note=todo_to_edit.note,
-                                due_date=str(todo_to_edit.due_date.date())),
-                        status='Edit mode Activated')
+                                due_date=str(todo_to_edit.due_date.date()),
+                                status='Edit mode Activated'),
+                        )
 
     return redirect(url_for('todo_list'), status='This todo does not exist')
 
@@ -72,6 +82,10 @@ def edit_todo(id):
 @app.route('/todo_list', methods=['GET', 'POST'])
 @login_required
 def todo_list():
+    """
+    rendering the todo items page
+
+    """
     # clearing all the flashes
     flashes = session.get('_flashes')
     if flashes:
@@ -85,13 +99,14 @@ def todo_list():
 
     if form.validate_on_submit():
         if request.args.get('id'):
-            # we are updating the todo item
+            # updating a todo item with id
             todo = Todo.query.filter_by(id=request.args.get('id')).first()
             todo.title = form.title.data
             todo.note = form.note.data
             todo.due_date = form.due_date.data
             status = 'Todo Updated!!'
         else:
+            # adding a new todo item
             todo = Todo(user_id=current_user.id,
                         title=form.title.data,
                         note=form.note.data,
@@ -119,6 +134,9 @@ def todo_list():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """
+    this is the login api, creating a session for proper login logout functionality
+    """
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -137,18 +155,24 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    registering a user with hashed password
+    """
     form = UserForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is None:
             hashed_pw = generate_password_hash(form.password.data, "sha256")
             user = User(username=form.username.data, email=form.email.data, password_hashed=hashed_pw)
+            # creating a valid user
             db.session.add(user)
             db.session.commit()
         else:
+            # user already exists
             user = User.query.filter_by(email=form.email.data).first()
             return render_template("register.html", form=form, user=user)
 
+        # clearing the form, i.e. we could have also made a redirect to the same page
         form.username.data = ''
         form.email.data = ''
         form.password.data = ''
