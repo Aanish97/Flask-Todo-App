@@ -1,4 +1,4 @@
-# FlaskProjectTest
+# Flask ToDo Application
 
 create sqlite db and run the project
 
